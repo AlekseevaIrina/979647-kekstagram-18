@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Irina Alekseeva](https://up.htmlacademy.ru/javascript/18/user/979647).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Молчанов](https://up.htmlacademy.ru/javascript/18/user/137398).
 
 ---
 
