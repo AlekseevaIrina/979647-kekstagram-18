@@ -4,6 +4,13 @@ var SHOWN_PICTURES = 25;
 var COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 var NAMES = ['Валера', 'Олег', 'Василий', 'Мария', 'Анна', 'Анатолий'];
 
+var bigPicture = document.querySelector('.big-picture');
+var bigPictureImg = bigPicture.querySelector('.big-picture__img img');
+var socialComments = bigPicture.querySelector('.social__comments');
+var commentsCountBlock = bigPicture.querySelector('.social__comment-count');
+var commentsLoader = bigPicture.querySelector('.comments-loader');
+var bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
+
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -33,6 +40,42 @@ var createPictures = function () {
   return pictures;
 };
 
+var getCommentsHTML = function (comments) {
+  var commentsVisible = 5;
+  var commentsString = '';
+
+  for (var i = 0; i < comments.length && i <= commentsVisible - 1; i++) {
+    commentsString += '<li class="social__comment"><img class="social__picture" src=' + comments[i].avatar + ' alt=' + comments[i].name + ' width="35" height="35"> <p class="social__text">' + comments[i].message + '</p></li>';
+  }
+
+  return commentsString;
+};
+
+var closeBigPicture = function () {
+  bigPicture.classList.add('hidden');
+};
+
+var showBigPicture = function (picture) {
+  bigPictureImg.src = picture.url;
+  bigPicture.querySelector('.likes-count').textContent = picture.likes;
+  bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
+  bigPicture.querySelector('.social__caption').textContent = picture.description;
+
+  socialComments.textContent = '';
+
+  socialComments.innerHTML = getCommentsHTML(picture.comments);
+
+  commentsCountBlock.classList.add('visually-hidden');
+  commentsLoader.classList.add('visually-hidden');
+
+  bigPicture.classList.remove('hidden');
+
+  bigPictureCancel.addEventListener('click', function () {
+    closeBigPicture();
+  });
+
+};
+
 var pictures = createPictures();
 
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -44,6 +87,10 @@ var renderPicture = function (picture) {
   pictureElement.querySelector('.picture__img').src = picture.url;
   pictureElement.querySelector('.picture__likes').textContent = picture.likes;
   pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
+
+  pictureElement.addEventListener('click', function () {
+    showBigPicture(picture);
+  });
 
   return pictureElement;
 };
