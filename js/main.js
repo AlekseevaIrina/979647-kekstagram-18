@@ -76,7 +76,7 @@ var showBigPicture = function (picture) {
 
   bigPicture.classList.remove('hidden');
 
-  bigPictureCancel.addEventListener('click', function() {
+  bigPictureCancel.addEventListener('click', function () {
     closeBigPicture();
   });
 
@@ -94,7 +94,7 @@ var renderPicture = function (picture) {
   pictureElement.querySelector('.picture__likes').textContent = picture.likes;
   pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
 
-  pictureElement.addEventListener('click', function() {
+  pictureElement.addEventListener('click', function () {
     showBigPicture(picture);
   });
 
