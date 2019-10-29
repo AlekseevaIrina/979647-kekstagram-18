@@ -133,11 +133,11 @@ var pinPosition = 0.2;
 
 var onEditFormEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    onEditFormClose();
+    onEditFormCancelClick();
   }
 };
 
-var onEditFormShow = function () {
+var onUploadFileChange = function () {
   editForm.classList.remove('hidden');
   document.addEventListener('keydown', onEditFormEscPress);
 
@@ -146,15 +146,15 @@ var onEditFormShow = function () {
   previewImg.style.filter = getSaturationFilter();
 };
 
-var onEditFormClose = function () {
+var onEditFormCancelClick = function () {
   editForm.classList.add('hidden');
   uploadFile.value = '';
   document.removeEventListener('keydown', onEditFormEscPress);
 };
 
-uploadFile.addEventListener('change', onEditFormShow);
+uploadFile.addEventListener('change', onUploadFileChange);
 
-editFormCancel.addEventListener('click', onEditFormClose);
+editFormCancel.addEventListener('click', onEditFormCancelClick);
 
 //  применение фильтров
 var getSaturationFilter = function () {
@@ -201,11 +201,11 @@ effectsRadio.forEach(function (effect) {
   });
 });
 
-var onSaturationLevelSet = function () {
+var onEffectLevelPinMouseup = function () {
   previewImg.style.filter = getSaturationFilter();
 };
 
-effectLevelPin.addEventListener('mouseup', onSaturationLevelSet);
+effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
 
 //  изменение размера
 var SCALE_STEP = 25;
@@ -229,20 +229,20 @@ var changeSize = function (isReduce) {
   previewImg.style.transform = 'scale(' + currentScaleControl / 100 + ')';
 };
 
-var onSizeReduce = function () {
+var onScaleControlSmallerClick = function () {
   if (currentScaleControl > SCALE_MIN) {
     changeSize(true);
   }
 };
 
-var onSizeIncrease = function () {
+var onScaleControlBiggerClick = function () {
   if (currentScaleControl < SCALE_MAX) {
     changeSize(false);
   }
 };
 
-scaleControlSmaller.addEventListener('click', onSizeReduce);
-scaleControlBigger.addEventListener('click', onSizeIncrease);
+scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
 
 //  валидация хэштегов
 var hashtagField = document.querySelector('.text__hashtags');
@@ -274,7 +274,7 @@ hashtagField.addEventListener('invalid', function () {
   }
 });
 
-var onCheckedHashtags = function () {
+var onHashtagFieldChange = function () {
 
   var hashtags = hashtagField.value.split(' ');
 
@@ -301,4 +301,4 @@ var onCheckedHashtags = function () {
 
 };
 
-hashtagField.addEventListener('input', onCheckedHashtags);
+hashtagField.addEventListener('input', onHashtagFieldChange);
