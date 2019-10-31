@@ -58,15 +58,22 @@ var commentsCountBlock = bigPicture.querySelector('.social__comment-count');
 var commentsLoader = bigPicture.querySelector('.comments-loader');
 var bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
 
-var onBigPictureEscPress = function (evt) {
+var editForm = document.querySelector('.img-upload__overlay');
+
+var onDocumentEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    closeBigPicture();
+    if (!bigPicture.classList.contains('hidden')) {
+      closeBigPicture();
+    }
+    if (!editForm.classList.contains('hidden')) {
+      onEditFormCancelClick();
+    }
   }
 };
 
 var closeBigPicture = function () {
   bigPicture.classList.add('hidden');
-  document.removeEventListener('keydown', onBigPictureEscPress);
+  document.removeEventListener('keydown', onDocumentEscPress);
 };
 
 var showBigPicture = function (picture) {
@@ -88,7 +95,7 @@ var showBigPicture = function (picture) {
     closeBigPicture();
   });
 
-  document.addEventListener('keydown', onBigPictureEscPress);
+  document.addEventListener('keydown', onDocumentEscPress);
 };
 
 var pictures = createPictures();
@@ -120,7 +127,6 @@ picturesList.appendChild(fragment);
 
 //  новое задание
 var uploadFile = document.querySelector('#upload-file');
-var editForm = document.querySelector('.img-upload__overlay');
 var editFormCancel = editForm.querySelector('#upload-cancel');
 var effectLevelPin = editForm.querySelector('.effect-level__pin');
 var effectsRadio = editForm.querySelectorAll('.effects__radio');
@@ -131,15 +137,9 @@ var currentEffect = 'effect-none';
 //  пока статична, т.к. ползунок еще не двигается
 var pinPosition = 0.2;
 
-var onEditFormEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    onEditFormCancelClick();
-  }
-};
-
 var onUploadFileChange = function () {
   editForm.classList.remove('hidden');
-  document.addEventListener('keydown', onEditFormEscPress);
+  document.addEventListener('keydown', onDocumentEscPress);
 
   currentEffect = 'effect-none';
   previewImg.className = 'effects__preview--' + currentEffect;
@@ -149,7 +149,7 @@ var onUploadFileChange = function () {
 var onEditFormCancelClick = function () {
   editForm.classList.add('hidden');
   uploadFile.value = '';
-  document.removeEventListener('keydown', onEditFormEscPress);
+  document.removeEventListener('keydown', onDocumentEscPress);
 };
 
 uploadFile.addEventListener('change', onUploadFileChange);
