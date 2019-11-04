@@ -12,7 +12,7 @@
     pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
 
     pictureElement.addEventListener('click', function () {
-      window.showBigPicture(picture);
+      window.preview.showBigPicture(picture);
     });
 
     return pictureElement;

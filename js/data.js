@@ -21,33 +21,34 @@
     return userComments;
   };
 
-  window.createPictures = function () {
-    var pictures = [];
-    for (var i = 1; i <= SHOWN_PICTURES; i++) {
-      pictures.push({
-        url: 'photos/' + getRandomInt(1, SHOWN_PICTURES) + '.jpg',
-        description: ' ',
-        likes: getRandomInt(15, 200),
-        comments: createUserComments()
-      });
+  window.data = {
+    createPictures: function () {
+      var pictures = [];
+      for (var i = 1; i <= SHOWN_PICTURES; i++) {
+        pictures.push({
+          url: 'photos/' + getRandomInt(1, SHOWN_PICTURES) + '.jpg',
+          description: ' ',
+          likes: getRandomInt(15, 200),
+          comments: createUserComments()
+        });
+      }
+      return pictures;
+    },
+    getCommentsFragment: function (comments) {
+      var fragment = document.createDocumentFragment();
+      var commentTemplate = document.querySelector('#social__comment').content.querySelector('.social__comment');
+      var commentsVisible = 5;
+
+      for (var i = 0; i < comments.length && i <= commentsVisible - 1; i++) {
+        var commentElement = commentTemplate.cloneNode(true);
+        commentElement.querySelector('.social__picture').src = comments[i].avatar;
+        commentElement.querySelector('.social__picture').alt = comments[i].name;
+        commentElement.querySelector('.social__text').textContent = comments[i].message;
+        fragment.appendChild(commentElement);
+      }
+
+      return fragment;
     }
-    return pictures;
-  };
-
-  window.getCommentsFragment = function (comments) {
-    var fragment = document.createDocumentFragment();
-    var commentTemplate = document.querySelector('#social__comment').content.querySelector('.social__comment');
-    var commentsVisible = 5;
-
-    for (var i = 0; i < comments.length && i <= commentsVisible - 1; i++) {
-      var commentElement = commentTemplate.cloneNode(true);
-      commentElement.querySelector('.social__picture').src = comments[i].avatar;
-      commentElement.querySelector('.social__picture').alt = comments[i].name;
-      commentElement.querySelector('.social__text').textContent = comments[i].message;
-      fragment.appendChild(commentElement);
-    }
-
-    return fragment;
   };
 
 })();

@@ -2,7 +2,7 @@
 
 (function () {
 
-  var pictures = window.createPictures();
+  var pictures = window.data.createPictures();
   var fragment = document.createDocumentFragment();
   var picturesList = document.querySelector('.pictures');
 

@@ -9,17 +9,17 @@
 
   window.util = {
     ESC_KEYCODE: ESC_KEYCODE,
-    ENTER_KEYCODE: ENTER_KEYCODE
-  };
-
-  window.onDocumentEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      if (!bigPicture.classList.contains('hidden')) {
-        window.closeBigPicture();
-      }
-      if (!editForm.classList.contains('hidden')) {
-        window.onEditFormCancelClick();
+    ENTER_KEYCODE: ENTER_KEYCODE,
+    onDocumentEscPress: function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        if (!bigPicture.classList.contains('hidden')) {
+          window.preview.closeBigPicture();
+        }
+        if (!editForm.classList.contains('hidden')) {
+          window.onEditFormCancelClick();
+        }
       }
     }
   };
+
 })();

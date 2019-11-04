@@ -2,13 +2,16 @@
 
 (function () {
 
+  var SCALE_STEP = 25;
+  var SCALE_MIN = 25;
+  var SCALE_MAX = 100;
+
   var uploadFile = document.querySelector('#upload-file');
   var editForm = document.querySelector('.img-upload__overlay');
   var editFormCancel = editForm.querySelector('#upload-cancel');
   var effectLevelPin = editForm.querySelector('.effect-level__pin');
   var effectsRadio = editForm.querySelectorAll('.effects__radio');
   var previewImg = editForm.querySelector('.img-upload__preview');
-
   var currentEffect = 'effect-none';
 
   // пока статична, т.к. ползунок еще не двигается
@@ -16,7 +19,7 @@
 
   var onUploadFileChange = function () {
     editForm.classList.remove('hidden');
-    document.addEventListener('keydown', window.onDocumentEscPress);
+    document.addEventListener('keydown', window.util.onDocumentEscPress);
 
     currentEffect = 'effect-none';
     previewImg.className = 'effects__preview--' + currentEffect;
@@ -26,7 +29,7 @@
   window.onEditFormCancelClick = function () {
     editForm.classList.add('hidden');
     uploadFile.value = '';
-    document.removeEventListener('keydown', window.onDocumentEscPress);
+    document.removeEventListener('keydown', window.util.onDocumentEscPress);
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
@@ -85,10 +88,6 @@
   effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
 
   // изменение размера
-  var SCALE_STEP = 25;
-  var SCALE_MIN = 25;
-  var SCALE_MAX = 100;
-
   var scaleControlSmaller = editForm.querySelector('.scale__control--smaller');
   var scaleControlBigger = editForm.querySelector('.scale__control--bigger');
   var scaleControlValue = editForm.querySelector('.scale__control--value');
