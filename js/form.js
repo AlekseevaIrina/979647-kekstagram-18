@@ -9,7 +9,7 @@
   var PIN_POSITION_X_MAX = 453;
   var PIN_POSITION_X_MIN = 0;
   var SATURATION_RATIO = 1 / PIN_POSITION_X_MAX;
-  var PIN_WIDTH = 18;
+  // var PIN_WIDTH = 18;
 
   var uploadFile = document.querySelector('#upload-file');
   var editForm = document.querySelector('.img-upload__overlay');
@@ -18,6 +18,8 @@
   var effectLevelDepth = editForm.querySelector('.effect-level__depth');
   var effectsRadio = editForm.querySelectorAll('.effects__radio');
   var previewImg = editForm.querySelector('.img-upload__preview');
+  var effectLevel = editForm.querySelector('.img-upload__effect-level');
+
   var currentEffect = 'effect-none';
 
   var onUploadFileChange = function () {
@@ -44,6 +46,8 @@
 
     var saturationFilter = 'none';
 
+    effectLevel.style.display = 'block';
+
     switch (currentEffect) {
       case 'chrome': {
         saturationFilter = 'grayscale(' + pinPosition + ')';
@@ -66,6 +70,7 @@
         break;
       }
       default:
+        effectLevel.style.display = 'none';
         saturationFilter = 'none';
     }
     return saturationFilter;
@@ -75,7 +80,7 @@
     effectLevelPin.style.left = positionX + 'px';
     effectLevelDepth.style.width = positionX + 'px';
 
-    previewImg.style.filter = getSaturationFilter((positionX + PIN_WIDTH / 2) * SATURATION_RATIO);
+    previewImg.style.filter = getSaturationFilter((positionX) * SATURATION_RATIO);
   };
 
   var addClass = function (effect) {
@@ -98,6 +103,8 @@
     var shiftX = startX - evt.clientX;
     var currentX = effectLevelPin.offsetLeft - shiftX;
 
+    editForm.style.userSelect = 'none';
+
     startX = evt.clientX;
 
     if (currentX >= PIN_POSITION_X_MIN && currentX <= PIN_POSITION_X_MAX) {
@@ -109,8 +116,10 @@
 
     previewImg.style.filter = getSaturationFilter();
 
-    effectLevelPin.removeEventListener('mousemove', onEffectLevelPinMousemove);
-    effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
+    document.removeEventListener('mousemove', onEffectLevelPinMousemove);
+    document.removeEventListener('mouseup', onEffectLevelPinMouseup);
+
+    editForm.style.userSelect = 'initial';
 
   };
 
@@ -118,8 +127,8 @@
 
     startX = evt.clientX;
 
-    effectLevelPin.addEventListener('mousemove', onEffectLevelPinMousemove);
-    effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
+    document.addEventListener('mousemove', onEffectLevelPinMousemove);
+    document.addEventListener('mouseup', onEffectLevelPinMouseup);
 
   });
 
