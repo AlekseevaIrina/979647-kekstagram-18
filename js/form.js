@@ -66,7 +66,7 @@
         break;
       }
       case 'heat': {
-        saturationFilter = 'brightness(' + pinPosition * 3 + ')';
+        saturationFilter = 'brightness(' + ((pinPosition * 2) + 1) + ')';
         break;
       }
       default:
