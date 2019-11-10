@@ -6,29 +6,34 @@
   var SCALE_MIN = 25;
   var SCALE_MAX = 100;
 
+  var PIN_POSITION_X_MAX = 453;
+  var PIN_POSITION_X_MIN = 0;
+  var SATURATION_RATIO = 1 / PIN_POSITION_X_MAX;
+  // var PIN_WIDTH = 18;
+
   var uploadFile = document.querySelector('#upload-file');
   var editForm = document.querySelector('.img-upload__overlay');
   var editFormCancel = editForm.querySelector('#upload-cancel');
   var effectLevelPin = editForm.querySelector('.effect-level__pin');
+  var effectLevelDepth = editForm.querySelector('.effect-level__depth');
   var effectsRadio = editForm.querySelectorAll('.effects__radio');
   var previewImg = editForm.querySelector('.img-upload__preview');
-  var currentEffect = 'effect-none';
+  var effectLevel = editForm.querySelector('.img-upload__effect-level');
 
-  // пока статична, т.к. ползунок еще не двигается
-  var pinPosition = 0.2;
+  var currentEffect = 'effect-none';
 
   var onUploadFileChange = function () {
     editForm.classList.remove('hidden');
     document.addEventListener('keydown', window.util.onDocumentEscPress);
 
-    currentEffect = 'effect-none';
-    previewImg.className = 'effects__preview--' + currentEffect;
-    previewImg.style.filter = getSaturationFilter();
+    addClass(effectsRadio[0]);
+
   };
 
   window.onEditFormCancelClick = function () {
     editForm.classList.add('hidden');
     uploadFile.value = '';
+
     document.removeEventListener('keydown', window.util.onDocumentEscPress);
   };
 
@@ -37,9 +42,11 @@
   editFormCancel.addEventListener('click', window.onEditFormCancelClick);
 
   // применение фильтров
-  var getSaturationFilter = function () {
+  var getSaturationFilter = function (pinPosition) {
 
     var saturationFilter = 'none';
+
+    effectLevel.style.display = 'block';
 
     switch (currentEffect) {
       case 'chrome': {
@@ -59,20 +66,27 @@
         break;
       }
       case 'heat': {
-        saturationFilter = 'brightness(' + pinPosition * 3 + ')';
+        saturationFilter = 'brightness(' + ((pinPosition * 2) + 1) + ')';
         break;
       }
       default:
+        effectLevel.style.display = 'none';
         saturationFilter = 'none';
     }
     return saturationFilter;
   };
 
+  var changePin = function (positionX) {
+    effectLevelPin.style.left = positionX + 'px';
+    effectLevelDepth.style.width = positionX + 'px';
+
+    previewImg.style.filter = getSaturationFilter((positionX) * SATURATION_RATIO);
+  };
+
   var addClass = function (effect) {
     previewImg.className = 'effects__preview--' + effect.value;
     currentEffect = effect.value;
-    pinPosition = 1;
-    previewImg.style.filter = getSaturationFilter();
+    changePin(PIN_POSITION_X_MAX);
   };
 
   effectsRadio.forEach(function (effect) {
@@ -81,11 +95,42 @@
     });
   });
 
-  var onEffectLevelPinMouseup = function () {
-    previewImg.style.filter = getSaturationFilter();
+  //  ползунок
+  var startX = 0;
+
+  var onEffectLevelPinMousemove = function (evt) {
+
+    var shiftX = startX - evt.clientX;
+    var currentX = effectLevelPin.offsetLeft - shiftX;
+
+    editForm.style.userSelect = 'none';
+
+    startX = evt.clientX;
+
+    if (currentX >= PIN_POSITION_X_MIN && currentX <= PIN_POSITION_X_MAX) {
+      changePin(currentX);
+    }
   };
 
-  effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
+  var onEffectLevelPinMouseup = function () {
+
+    previewImg.style.filter = getSaturationFilter();
+
+    document.removeEventListener('mousemove', onEffectLevelPinMousemove);
+    document.removeEventListener('mouseup', onEffectLevelPinMouseup);
+
+    editForm.style.userSelect = 'initial';
+
+  };
+
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+
+    startX = evt.clientX;
+
+    document.addEventListener('mousemove', onEffectLevelPinMousemove);
+    document.addEventListener('mouseup', onEffectLevelPinMouseup);
+
+  });
 
   // изменение размера
   var scaleControlSmaller = editForm.querySelector('.scale__control--smaller');
