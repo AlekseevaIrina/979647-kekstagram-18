@@ -2,14 +2,31 @@
 
 (function () {
 
-  var pictures = window.data.createPictures();
-  var fragment = document.createDocumentFragment();
-  var picturesList = document.querySelector('.pictures');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
-  pictures.forEach(function (picture) {
-    fragment.appendChild(window.renderPicture(picture));
-  });
+  //  обработчик успешной загрузки фотографий с сервера
+  var onSuccess = function (picturesArray) {
 
-  picturesList.appendChild(fragment);
+    var pictures = window.data.createPictures(picturesArray);
+    var fragment = document.createDocumentFragment();
+    var picturesList = document.querySelector('.pictures');
+
+    pictures.forEach(function (picture) {
+      fragment.appendChild(window.renderPicture(picture));
+    });
+
+    picturesList.appendChild(fragment);
+
+  };
+
+  //  обработчик ошибки при загрузке фотографий с сервера
+  var onError = function (errorMessage) {
+    var errorItem = errorTemplate.cloneNode(true);
+
+    errorItem.querySelector('.error__title').textContent = errorMessage;
+    document.querySelector('main').insertAdjacentElement('afterbegin', errorItem);
+  };
+
+  window.load(onSuccess, onError);
 
 })();
