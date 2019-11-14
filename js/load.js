@@ -2,13 +2,15 @@
 
 (function () {
   var URL = 'https://js.dump.academy/kekstagram/data';
+  var HTTP_REQUEST_OK = 200;
+  var WAITING_TIMEOUT = 5000;
 
   window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === HTTP_REQUEST_OK) {
         onSuccess(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -16,18 +18,14 @@
     });
 
     xhr.addEventListener('error', function () {
-      if (xhr.statusText !== 200) {
-        onError('Произошла ошибка соединения');
-      }
+      onError('Произошла ошибка соединения');
     });
 
     xhr.addEventListener('timeout', function () {
-      if (xhr.statusText !== 200) {
-        onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-      }
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 5000;
+    xhr.timeout = WAITING_TIMEOUT;
 
     xhr.open('GET', URL);
     xhr.send();
