@@ -3,27 +3,27 @@
 (function () {
   var SHOWN_PICTURES = 25;
 
-  var createUserComments = function (pictureObject) {
+  var createUserComments = function (pictures) {
     var userComments = [];
-    for (var i = 0; i < pictureObject.length; i++) {
+    for (var i = 0; i < pictures.length; i++) {
       userComments.push({
-        avatar: pictureObject[i].avatar,
-        message: pictureObject[i].message,
-        name: pictureObject[i].name
+        avatar: pictures[i].avatar,
+        message: pictures[i].message,
+        name: pictures[i].name
       });
     }
     return userComments;
   };
 
   window.data = {
-    createPictures: function (pictureObject) {
+    createPictures: function (allPictures) {
       var pictures = [];
       for (var i = 0; i < SHOWN_PICTURES; i++) {
         pictures.push({
-          url: pictureObject[i].url,
+          url: allPictures[i].url,
           description: ' ',
-          likes: pictureObject[i].likes,
-          comments: createUserComments(pictureObject[i].comments)
+          likes: allPictures[i].likes,
+          comments: createUserComments(allPictures[i].comments)
         });
       }
       return pictures;
