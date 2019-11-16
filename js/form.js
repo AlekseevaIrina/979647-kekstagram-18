@@ -224,4 +224,43 @@
 
   hashtagField.addEventListener('input', onHashtagFieldChange);
 
+  // работа с окном успешной отправки данных на сервер
+  var succesTemplateElement = document.querySelector('#success').content.querySelector('.success');
+  var imgUploadForm = document.querySelector('.img-upload__form');
+
+  var successItem = succesTemplateElement.cloneNode(true);
+  successItem.style.display = 'none';
+  document.querySelector('main').insertAdjacentElement('afterbegin', successItem);
+
+  var successButtonElement = successItem.querySelector('.success__button');
+
+  var onSuccessMessageClose = function () {
+    successItem.style.display = 'none';
+    document.removeEventListener('keydown', onSuccessMessageEscPress);
+  };
+
+  var onSuccessMessageEscPress = function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      onSuccessMessageClose();
+    }
+  };
+
+  successButtonElement.addEventListener('click', onSuccessMessageClose);
+  successItem.addEventListener('click', onSuccessMessageClose);
+
+  var onUploadSuccess = function () {
+    window.onEditFormCancelClick();
+
+    successItem.style.display = 'flex';
+
+    document.addEventListener('keydown', onSuccessMessageEscPress);
+  };
+
+  //  отправка данных на сервер
+  imgUploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    window.api.send(new FormData(imgUploadForm), onUploadSuccess, window.api.onServerRequestError);
+  });
+
 })();

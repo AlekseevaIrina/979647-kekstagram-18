@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-
-  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-
   //  обработчик успешной загрузки фотографий с сервера
   var onSuccess = function (allPictures) {
 
@@ -19,14 +16,6 @@
 
   };
 
-  //  обработчик ошибки при загрузке фотографий с сервера
-  var onError = function (errorMessage) {
-    var errorItem = errorTemplate.cloneNode(true);
-
-    errorItem.querySelector('.error__title').textContent = errorMessage;
-    document.querySelector('main').insertAdjacentElement('afterbegin', errorItem);
-  };
-
-  window.load(onSuccess, onError);
+  window.api.load(onSuccess, window.api.onServerRequestError);
 
 })();
