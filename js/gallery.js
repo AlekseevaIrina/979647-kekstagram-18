@@ -8,7 +8,7 @@
   var randomButton = imgFilters.querySelector('#filter-random');
   var discussedButton = imgFilters.querySelector('#filter-discussed');
 
-  var picturesCopy = [];
+  var copiesOfPictures = [];
 
   window.updatePictures = function (allPictures) {
 
@@ -37,14 +37,14 @@
   //  обработчик успешной загрузки фотографий с сервера
   var onSuccess = function (pictures) {
 
-    picturesCopy = JSON.parse(JSON.stringify(pictures));
+    copiesOfPictures = JSON.parse(JSON.stringify(pictures));
 
     window.updatePictures(pictures);
 
     imgFilters.classList.remove('img-filters--inactive');
 
     popularButton.addEventListener('click', window.util.debounce(function () {
-      window.filters.onPopularButtonClick(picturesCopy, popularButton);
+      window.filters.onPopularButtonClick(copiesOfPictures, popularButton);
     }, DEBOUNCE_INTERVAL));
 
     randomButton.addEventListener('click', window.util.debounce(function () {

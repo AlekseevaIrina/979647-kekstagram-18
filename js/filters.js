@@ -17,12 +17,12 @@
   };
 
   var showRandomPictures = function (pictures, button) {
-    var picturesCopy = JSON.parse(JSON.stringify(pictures));
+    var copiesOfPictures = JSON.parse(JSON.stringify(pictures));
     var picturesRandom = [];
 
     for (var i = 0; i < RANDOM_ARRAY_LENGTH; i++) {
-      var index = window.util.getRandomInt(0, picturesCopy.length - 1);
-      picturesRandom.push(picturesCopy.splice(index, 1)[0]);
+      var index = window.util.getRandomInt(0, copiesOfPictures.length - 1);
+      picturesRandom.push(copiesOfPictures.splice(index, 1)[0]);
     }
 
     window.updatePictures(picturesRandom);
