@@ -20,6 +20,9 @@
   var previewImg = editForm.querySelector('.img-upload__preview');
   var effectLevel = editForm.querySelector('.img-upload__effect-level');
 
+  var hashtagField = document.querySelector('.text__hashtags');
+  var descriptionField = document.querySelector('.text__description');
+
   var currentEffect = 'effect-none';
 
   var onUploadFileChange = function () {
@@ -31,10 +34,13 @@
   };
 
   window.onEditFormCancelClick = function () {
-    editForm.classList.add('hidden');
-    uploadFile.value = '';
 
-    document.removeEventListener('keydown', window.util.onDocumentEscPress);
+    if (document.activeElement !== hashtagField && document.activeElement !== descriptionField) {
+      editForm.classList.add('hidden');
+      uploadFile.value = '';
+
+      document.removeEventListener('keydown', window.util.onDocumentEscPress);
+    }
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
@@ -166,8 +172,6 @@
   scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
 
   // валидация хэштегов
-  var hashtagField = document.querySelector('.text__hashtags');
-
   var isHashSymbolFirst = function (hashtag) {
     if (hashtag[0] === '#') {
       return true;

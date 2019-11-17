@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var SHOWN_PICTURES = 25;
+  //  var SHOWN_PICTURES = 25;
 
   var createUserComments = function (pictures) {
     var userComments = [];
@@ -18,7 +18,7 @@
   window.data = {
     createPictures: function (allPictures) {
       var pictures = [];
-      for (var i = 0; i < SHOWN_PICTURES; i++) {
+      for (var i = 0; i < allPictures.length; i++) {
         pictures.push({
           url: allPictures[i].url,
           description: ' ',
