@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
+  var SHOWN_COMMENTS = 5;
+
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureImg = bigPicture.querySelector('.big-picture__img img');
   var socialComments = bigPicture.querySelector('.social__comments');
-  //  var commentsCountBlock = bigPicture.querySelector('.social__comment-count');
   var commentsLoader = bigPicture.querySelector('.comments-loader');
   var bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
-  var SHOWN_COMMENTS = 5;
 
   socialComments.textContent = '';
 
@@ -33,6 +33,9 @@
         commentsLoader.addEventListener('click', function () {
           socialComments.appendChild(window.data.getCommentsFragment(picture.comments.slice(commentsVisible, commentsVisible + SHOWN_COMMENTS)));
           commentsVisible += SHOWN_COMMENTS;
+          if (numberOfComments < commentsVisible) {
+            commentsLoader.classList.add('visually-hidden');
+          }
         });
 
         commentsLoader.classList.remove('visually-hidden');

@@ -16,13 +16,13 @@
 
     var pictures = window.data.createPictures(allPictures);
     var fragment = document.createDocumentFragment();
-    var picturesList = document.querySelector('.pictures');
+    var picturesElement = document.querySelector('.pictures');
 
     pictures.forEach(function (picture) {
       fragment.appendChild(window.renderPicture(picture));
     });
 
-    picturesList.appendChild(fragment);
+    picturesElement.appendChild(fragment);
   };
 
   //  удаление уже отрисованных фотографий
@@ -44,15 +44,15 @@
     imgFilters.classList.remove('img-filters--inactive');
 
     popularButton.addEventListener('click', window.util.debounce(function () {
-      window.filters.onPopularButtonClick(copiesOfPictures, popularButton);
+      window.filters.showPopularPictures(copiesOfPictures, popularButton);
     }, DEBOUNCE_INTERVAL));
 
     randomButton.addEventListener('click', window.util.debounce(function () {
-      window.filters.onRandomButtonClick(pictures, randomButton);
+      window.filters.showRandomPictures(pictures, randomButton);
     }, DEBOUNCE_INTERVAL));
 
     discussedButton.addEventListener('click', window.util.debounce(function () {
-      window.filters.onDiscussedButtonClick(pictures, discussedButton);
+      window.filters.showDiscussedPictures(pictures, discussedButton);
     }, DEBOUNCE_INTERVAL));
   };
 
