@@ -9,7 +9,9 @@
   var PIN_POSITION_X_MAX = 453;
   var PIN_POSITION_X_MIN = 0;
   var SATURATION_RATIO = 1 / PIN_POSITION_X_MAX;
-  // var PIN_WIDTH = 18;
+
+  var FILE_TYPES = ['.gif', '.jpg', '.jpeg', '.png'];
+  var DEFAULT_PREVIEW_PATH = 'img/upload-default-image.jpg';
 
   var uploadFile = document.querySelector('#upload-file');
   var editForm = document.querySelector('.img-upload__overlay');
@@ -17,27 +19,66 @@
   var effectLevelPin = editForm.querySelector('.effect-level__pin');
   var effectLevelDepth = editForm.querySelector('.effect-level__depth');
   var effectsRadio = editForm.querySelectorAll('.effects__radio');
-  var previewImg = editForm.querySelector('.img-upload__preview');
+  var previewImg = editForm.querySelector('.img-upload__preview img');
   var effectLevel = editForm.querySelector('.img-upload__effect-level');
 
   var hashtagField = document.querySelector('.text__hashtags');
   var descriptionField = document.querySelector('.text__description');
 
+  var scaleControlSmaller = editForm.querySelector('.scale__control--smaller');
+  var scaleControlBigger = editForm.querySelector('.scale__control--bigger');
+  var scaleControlValue = editForm.querySelector('.scale__control--value');
+
   var currentEffect = 'effect-none';
 
+  //  очищаем value загруженного файла
+  var clearUploadFile = function () {
+    uploadFile.value = '';
+    hashtagField.value = '';
+    descriptionField.value = '';
+    previewImg.src = DEFAULT_PREVIEW_PATH;
+  };
+
   var onUploadFileChange = function () {
+
+    var file = uploadFile.files[0];
+
+    if (file) {
+      var fileName = file.name.toLowerCase();
+      var matches = FILE_TYPES.some(function (it) {
+        return fileName.endsWith(it);
+      });
+
+      if (matches) {
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+          previewImg.src = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+        showEditForm();
+      }
+    }
+
+  };
+
+  var showEditForm = function () {
     editForm.classList.remove('hidden');
     document.addEventListener('keydown', window.util.onDocumentEscPress);
+
+    scaleControlValue.value = SCALE_MAX + '%';
+    previewImg.style.transform = 'scale(' + SCALE_MAX / 100 + ')';
 
     addClass(effectsRadio[0]);
 
   };
 
-  window.onEditFormCancelClick = function () {
+  window.closeEditForm = function () {
 
     if (document.activeElement !== hashtagField && document.activeElement !== descriptionField) {
       editForm.classList.add('hidden');
-      uploadFile.value = '';
+      clearUploadFile();
 
       document.removeEventListener('keydown', window.util.onDocumentEscPress);
     }
@@ -45,7 +86,9 @@
 
   uploadFile.addEventListener('change', onUploadFileChange);
 
-  editFormCancel.addEventListener('click', window.onEditFormCancelClick);
+  editFormCancel.addEventListener('click', function () {
+    window.closeEditForm();
+  });
 
   // применение фильтров
   var getSaturationFilter = function (pinPosition) {
@@ -139,19 +182,13 @@
   });
 
   // изменение размера
-  var scaleControlSmaller = editForm.querySelector('.scale__control--smaller');
-  var scaleControlBigger = editForm.querySelector('.scale__control--bigger');
-  var scaleControlValue = editForm.querySelector('.scale__control--value');
-
   scaleControlValue.value = '100%';
   var currentScaleControl = SCALE_MAX;
 
   var changeSize = function (isReduce) {
-    if (isReduce) {
-      currentScaleControl = currentScaleControl - SCALE_STEP;
-    } else {
-      currentScaleControl = currentScaleControl + SCALE_STEP;
-    }
+
+    currentScaleControl = isReduce ? currentScaleControl - SCALE_STEP : currentScaleControl + SCALE_STEP;
+
     scaleControlValue.value = currentScaleControl + '%';
     previewImg.style.transform = 'scale(' + currentScaleControl / 100 + ')';
   };
@@ -173,10 +210,7 @@
 
   // валидация хэштегов
   var isHashSymbolFirst = function (hashtag) {
-    if (hashtag[0] === '#') {
-      return true;
-    }
-    return false;
+    return hashtag[0] === '#';
   };
 
   var isHashtagsSame = function (tags) {
@@ -191,6 +225,15 @@
 
     return false;
 
+  };
+
+  var isHashtagsContainsSpaces = function (tags) {
+    for (var i = 0; i < tags.length; i++) {
+      if (tags[i].slice(0).indexOf('#')) {
+        return false;
+      }
+    }
+    return true;
   };
 
   hashtagField.addEventListener('invalid', function () {
@@ -212,6 +255,9 @@
         return;
       } else if (hashtag.length > 20) {
         hashtagField.setCustomValidity('Максимальная длина одного хэш-тега 20 символов, включая решётку');
+        return;
+      } else if (!isHashtagsContainsSpaces(hashtag)) {
+        hashtagField.setCustomValidity('Хэш-теги должны быть разделены пробелами');
         return;
       } else {
         hashtagField.setCustomValidity('');
@@ -253,7 +299,8 @@
   successItem.addEventListener('click', onSuccessMessageClose);
 
   var onUploadSuccess = function () {
-    window.onEditFormCancelClick();
+
+    window.closeEditForm();
 
     successItem.style.display = 'flex';
 

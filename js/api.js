@@ -70,6 +70,7 @@
     onServerRequestError: function (errorMessage) {
       errorItem.querySelector('.error__title').textContent = errorMessage;
       errorItem.style.display = 'flex';
+      errorItem.style.zIndex = 3;
 
       document.addEventListener('keydown', onErrorMessageEscPress);
     }

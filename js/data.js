@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  //  var SHOWN_PICTURES = 25;
-
   var createUserComments = function (pictures) {
     var userComments = [];
     for (var i = 0; i < pictures.length; i++) {
@@ -31,10 +29,10 @@
     getCommentsFragment: function (comments) {
       var fragment = document.createDocumentFragment();
       var commentTemplate = document.querySelector('#social__comment').content.querySelector('.social__comment');
-      var commentsVisible = 5;
 
-      for (var i = 0; i < comments.length && i <= commentsVisible - 1; i++) {
+      for (var i = 0; i < comments.length; i++) {
         var commentElement = commentTemplate.cloneNode(true);
+
         commentElement.querySelector('.social__picture').src = comments[i].avatar;
         commentElement.querySelector('.social__picture').alt = comments[i].name;
         commentElement.querySelector('.social__text').textContent = comments[i].message;

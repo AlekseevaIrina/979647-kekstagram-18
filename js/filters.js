@@ -11,25 +11,25 @@
     activeButton.classList.add(CLASS_ACTIVE_BUTTON);
   };
 
-  var showPopularPictures = function (pictures, button) {
+  var getPopularPictures = function (pictures, button) {
     window.updatePictures(pictures);
     changeCurrentButton(button);
   };
 
-  var showRandomPictures = function (pictures, button) {
-    var picturesCopy = JSON.parse(JSON.stringify(pictures));
+  var getRandomPictures = function (pictures, button) {
+    var copiesOfPictures = JSON.parse(JSON.stringify(pictures));
     var picturesRandom = [];
 
     for (var i = 0; i < RANDOM_ARRAY_LENGTH; i++) {
-      var index = window.util.getRandomInt(0, picturesCopy.length - 1);
-      picturesRandom.push(picturesCopy.splice(index, 1)[0]);
+      var index = window.util.getRandomInt(0, copiesOfPictures.length - 1);
+      picturesRandom.push(copiesOfPictures.splice(index, 1)[0]);
     }
 
     window.updatePictures(picturesRandom);
     changeCurrentButton(button);
   };
 
-  var showDiscussedPictures = function (pictures, button) {
+  var getDiscussedPictures = function (pictures, button) {
     var picturesDiscussed = pictures.sort(function (prevPicture, nextPicture) {
       return nextPicture.comments.length - prevPicture.comments.length;
     });
@@ -39,10 +39,10 @@
   };
 
   window.filters = {
-    onPopularButtonClick: showPopularPictures,
+    showPopularPictures: getPopularPictures,
 
-    onRandomButtonClick: showRandomPictures,
+    showRandomPictures: getRandomPictures,
 
-    onDiscussedButtonClick: showDiscussedPictures
+    showDiscussedPictures: getDiscussedPictures
   };
 })();

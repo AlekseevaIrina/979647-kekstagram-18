@@ -16,7 +16,7 @@
           window.preview.closeBigPicture();
         }
         if (!editForm.classList.contains('hidden')) {
-          window.onEditFormCancelClick();
+          window.closeEditForm();
         }
       }
     },
