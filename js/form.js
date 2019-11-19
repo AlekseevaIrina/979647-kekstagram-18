@@ -249,16 +249,12 @@
     hashtags.forEach(function (hashtag) {
       if (!isHashSymbolFirst(hashtag)) {
         hashtagField.setCustomValidity('Хэш-тег должен начинаться с символа #');
-        return;
       } else if (hashtag.length === 1) {
         hashtagField.setCustomValidity('Хэш-тег не может состоять только из одной решётки');
-        return;
       } else if (hashtag.length > 20) {
         hashtagField.setCustomValidity('Максимальная длина одного хэш-тега 20 символов, включая решётку');
-        return;
       } else if (!isHashtagsContainsSpaces(hashtag)) {
         hashtagField.setCustomValidity('Хэш-теги должны быть разделены пробелами');
-        return;
       } else {
         hashtagField.setCustomValidity('');
       }
